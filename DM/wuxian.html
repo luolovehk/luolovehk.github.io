@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>DM海报</title>
+  <style>
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: white;
+    }
+    
+    .banner {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      margin-top: 20px;
+    }
+    
+    .container {
+      overflow: auto;
+      background: linear-gradient(#FFEDCC, #FFD999);
+    }
+    
+    #gradient-container {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      background: none;
+    }
+    
+    
+    .content-container {
+      background-color: transparent;
+    }
+    
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 23px;
+      padding: 10px;
+      background-color: white;
+    }
+    
+    .row4 {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    
+    
+    .unit2 {
+      font-size: 36px;
+      line-height: 1.4;
+      color: white;
+      min-height: 100%;
+      box-sizing: border-box;
+      width: 100%;
+      background-color: #d40000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .column {
+      width: 81%;
+      cursor: pointer;
+    }
+    .column img {
+      width: 450px; /* 固定宽度 */
+      height: 380px; /* 固定高度 */
+      object-fit: cover; /* 保持比例，裁剪多余部分 */
+      border-radius: 15px;  
+    }
+    .column .name {
+      font-size: 38px;
+      font-weight: bold;
+      cursor: pointer;
+      display: -webkit-box;     /* 使用旧版的 flexbox */
+      -webkit-line-clamp: 2;   /* 限制在2行内 */ 
+      -webkit-box-orient: vertical;   /* 列方向 */
+      overflow: hidden;        /* 隐藏超出的内容 */
+      line-height: 1.2;
+      color: rgba(0, 0, 0, 0.8);
+      text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+      margin-top: 20px;
+      margin-left: 40px;
+    }
+    .column .price {
+      font-size: 148px;
+      cursor: pointer;
+      color: red;
+      font-family: "Impact", sans-serif;
+      text-shadow: -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white, 2px 2px 0 white;
+      margin-left: 30px;
+      
+    }
+    
+    @font-face {
+      font-family: "Impact";
+      src: url("IMPACT.TTF") format("truetype");
+      /* 添加其他格式的字体文件，以便在不同浏览器中兼容性更好 */
+    }
+    
+    .controls button {
+      padding: 10px 20px; /* 调整按钮的内边距 */
+      font-size: 42px; /* 调整按钮的字体大小 */
+      border-radius: 5px; /* 调整按钮的圆角 */
+      background-color: #fff; /* 调整按钮的背景颜色 */
+      color: #000; /* 调整按钮的文本颜色 */
+      border: none; /* 移除按钮的边框 */
+      cursor: pointer; /* 显示光标为手型指针 */
+    }
+    .column .unit {
+      font-size: 32px;
+      color: black;
+      line-height: 1.2;
+      margin-left: 30px;
+    }
+    .column .unit2 {
+      font-size: 34px;
+      color: black;
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+    
+    #fileInput {
+      display: none;
+    }
+    
+    .download-button {
+      position: absolute;
+      font-size: 52px;
+      top: 30px;
+      right: 30px;
+      padding: 10px 20px;
+      background-color: #be104d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+    }
+    
+    .download-button:hover {
+      background-color: #45a049;
+    }
+    
+    .wechat-message {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      font-size: 64px;
+      transform: translate(-50%, -50%);
+      padding: 10px;
+      background-color: #f44336;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      z-index: 9999;
+    }
+    .show-message .wechat-message {
+      display: block;
+    }
+    .show-message .main-content {
+      display: none;
+    }
+    
+  </style>
+</head>
+<body>
+  <div id="gradient-container">
+    <div class="content-container">
+      <div class="controls">
+        <button onclick="addRow()" id="addRowButton">添加行</button> 
+        <button onclick="removeRow(getNextRowNumber() - 1)" id="removeRowButton">删除行</button>  
+      </div>
+      <div class="container">
+        <img class="banner" src="banner.webp">
+        <div class="row4">
+          <div id="currentDate" class="unit2" contenteditable="true"></div>
+        </div>
+        <div id="rowContainer">  
+          <div class="row">
+            <div class="column" onclick="openFilePicker(1)">
+              <img id="image1" src="product1.jpg">
+            </div>
+            <div class="column">
+              <div class="name" contenteditable="true" oninput="updateName(1)" onclick="event.stopPropagation();">品名</div>  
+              <div class="price" id="price1" contenteditable="true" oninput="updatePrice(1)" onclick="event.stopPropagation();">0</div>  
+              <div class="unit" contenteditable="true" onclick="event.stopPropagation();">元/斤</div>  
+              <div class="unit" contenteditable="true" onclick="event.stopPropagation();"> &nbsp;</div>  
+            </div>
+          </div>
+          <div id="row2" class="row">
+            <div class="column" onclick="openFilePicker(2)">
+              <img id="image2" src="product1.jpg">
+            </div>
+            <div class="column">
+              <div class="name" contenteditable="true" oninput="updateName(2)" onclick="event.stopPropagation();">品名</div>  
+              <div class="price" id="price2" contenteditable="true" oninput="updatePrice(2)" onclick="event.stopPropagation();">0</div>  
+              <div class="unit" contenteditable="true" onclick="event.stopPropagation();">元/斤</div>  
+              <div class="unit" contenteditable="true" onclick="event.stopPropagation();"> &nbsp;</div>  
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    <!-- 添加更多的列，每列三个品种 -->
+    <div class="download-button" onclick="downloadPoster()" id="downloadButton">&nbsp;</div>
+    <canvas id="canvas" style="display: none;"></canvas>
+  </div>
+  <script src="dist/html2canvas.min.js"></script>
+  
+  <script>
+    function addRow() {
+      var rowNumber = getNextRowNumber();
+      var rowID = 'row' + rowNumber;
+      var newRow = document.createElement('div');
+      newRow.id = rowID;
+      newRow.classList.add('row');
+      newRow.style.top = getLastRowBottomPosition() + 5 + 'px';
+      newRow.innerHTML = `
+      <div class="column" onclick="openFilePicker(${getNextRowNumber()})">
+        <img id="image${getNextRowNumber()}" src="product1.jpg">
+      </div>
+      <div class="column">
+        <div class="name" contenteditable="true" oninput="updateName(${getNextRowNumber()})" onclick="event.stopPropagation();">品名</div>
+        <div class="price" id="price${getNextRowNumber()}" contenteditable="true" oninput="updatePrice(${getNextRowNumber()})" onclick="event.stopPropagation();">0</div>
+        <div class="unit" contenteditable="true" onclick="event.stopPropagation();">元/斤</div>
+        <div class="unit" contenteditable="true" onclick="event.stopPropagation();"> &nbsp;&nbsp;&nbsp;&nbsp;</div>  
+      </div>
+      `;
+      rowContainer.appendChild(newRow);
+    }
+    function removeRow(rowNumber) {
+      var rowToRemove = document.getElementById('row' + rowNumber);
+      if (!rowToRemove) {
+        return;
+      }
+      rowToRemove.remove();
+    }
+    
+    function getNextRowNumber() {
+      var rows = document.querySelectorAll('.row');
+      return rows.length + 1;  
+    }
+    
+    function getLastRowBottomPosition() {
+      var rows = document.querySelectorAll('.row');
+      var lastRow = rows[rows.length - 1];
+      var lastRowStyle = getComputedStyle(lastRow);
+      var lastRowMarginBottom = parseInt(lastRowStyle.marginBottom);
+      return lastRow.offsetTop + lastRow.offsetHeight + lastRowMarginBottom;   
+    }
+    function openFilePicker(id) {
+      var fileInput = document.getElementById("fileInput");
+      fileInput.setAttribute("data-id", id);
+      fileInput.click();
+    }
+    function handleFileChange() {
+      var fileInput = document.getElementById("fileInput");
+      var id = fileInput.getAttribute("data-id");
+      var file = fileInput.files[0];
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var imageUrl = e.target.result;
+        var imageElement = document.getElementById("image" + id);
+        imageElement.src = imageUrl;
+      };
+      reader.readAsDataURL(file);
+    }
+    function updateName(id) {
+      var nameElement = document.getElementById("name" + id);
+      var newName = nameElement.innerText;
+      nameElement.textContent = newName;
+    }
+    function updatePrice(id) {
+      var priceElement = document.getElementById("price" + id);
+      var newPrice = priceElement.innerText;
+      priceElement.textContent = newPrice;
+    }
+    function downloadPoster() {
+      var downloadButton = document.getElementById("downloadButton");
+      var addRowButton = document.getElementById("addRowButton");
+      var removeRowButton = document.getElementById("removeRowButton");
+      downloadButton.style.display = "none";
+      addRowButton.style.display = "none";
+      removeRowButton.style.display = "none"; 
+      var canvas = document.getElementById('canvas');
+      var scale = 1;
+      var width = document.documentElement.offsetWidth;
+      var height = document.documentElement.scrollHeight;
+      canvas.width = width * scale;
+      canvas.height = height * scale;
+      var ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#FFEDCC');
+      gradient.addColorStop(1, '#FFD999');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height); 
+      html2canvas(document.querySelector('.container'), {
+        scale: 1,
+        backgroundColor: null,
+        useCORS: true 
+      }).then(function (contentCanvas) {
+        ctx.drawImage(contentCanvas, 0, 0);
+        
+        // 创建下载链接并下载图片 
+        var link = document.createElement('a');
+        var date = new Date();
+ var fileName = date.getFullYear() + "-" + 
+                  (date.getMonth() + 1) + "-" + 
+                  date.getDate() + "_" +
+                  date.getHours() + "-" + 
+                  date.getMinutes() + "-" + 
+                  date.getSeconds();
+ link.download = fileName;
+        link.href = canvas.toDataURL('image/png');
+        link.click();  
+        
+        downloadButton.style.display = "block";
+        addRowButton.style.display = "block"; 
+        removeRowButton.style.display = "block";
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+    }
+    
+    function getCurrentDate() {
+      var dateElement = document.getElementById("currentDate");
+      var today = new Date();
+      
+      var formattedDate = today.toLocaleDateString('zh-CN', {
+        month: 'long',
+        day: 'numeric'
+      });
+      
+      dateElement.innerText = '海报时间：' + formattedDate + '    兆康XX店';  
+    }
+    
+    // 调用函数以初始化日期
+    getCurrentDate();
+    
+    var container = document.getElementById('gradient-container');
+    var canvas = document.getElementById('canvas');
+    
+    function resize() {
+      container.style.width = '100%';
+      container.style.height = '100vh';  
+      
+      canvas.width = container.offsetWidth;
+      canvas.height = container.offsetHeight;
+      
+      var ctx = canvas.getContext('2d');
+      var gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#FFEDCC');
+      gradient.addColorStop(1, '#FFD999');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    } 
+    
+    window.addEventListener('resize', resize);
+    resize();
+    
+    function handleFileChange() {
+      var fileInput = document.getElementById("fileInput");
+      var id = fileInput.getAttribute("data-id");
+      var file = fileInput.files[0];
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var imageUrl = e.target.result;
+        
+        // 创建一个新的图像元素
+        var image = new Image();
+        image.onload = function () {
+          var canvas = document.createElement("canvas");
+          var context = canvas.getContext("2d");
+          
+          // 设置目标尺寸
+          var targetWidth = 450;
+          var targetHeight = 380;
+          
+          // 计算缩放比例
+          var scaleFactor = Math.max(targetWidth / image.width, targetHeight / image.height);
+          var scaledWidth = image.width * scaleFactor;
+          var scaledHeight = image.height * scaleFactor;
+          
+          // 计算图像在画布上的位置
+          var offsetX = (targetWidth - scaledWidth) / 2;
+          var offsetY = (targetHeight - scaledHeight) / 2;
+          
+          // 在画布上绘制图像
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+          context.drawImage(image, offsetX, offsetY, scaledWidth, scaledHeight);
+          
+          // 将处理后的图像设置为目标元素的源
+          var imageElement = document.getElementById("image" + id);
+          imageElement.src = canvas.toDataURL();
+        };
+        // 设置图像源为导入的文件
+        image.src = imageUrl;
+      };
+      
+      // Read the selected file as a data URL
+      reader.readAsDataURL(file);
+    }
+    
+  </script>
+  
+  <input type="file" id="fileInput" accept="image/*" onchange="handleFileChange()">
+</body>
+</html>

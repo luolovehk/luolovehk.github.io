@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>DM海报</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            position: relative;
+            width: 1120px;
+            height: 2120px;
+            background-image: url('html9.webp');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            overflow: hidden;
+        }
+        
+        .date {
+            font-size: 36px;
+            font-weight: bold;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            color: black;
+            position: absolute;
+            top: 20.5%;
+            left: 28%;
+            
+            transform: translateY(-50%);
+            background-color: yellow;
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            white-space: nowrap;
+            width: auto;
+        }
+        
+        
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            position: absolute;
+            top: 560px; /* 调整这个值来错开行的位置 */
+            left: 90px;
+            right: 50px;
+        }
+        
+        .row2 {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            position: absolute;
+            top: 1060px; /* 调整这个值来错开行的位置 */
+            left: 90px;
+            right: 50px;
+        }
+        .row3 {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            position: absolute;
+            top: 1560px; /* 调整这个值来错开行的位置 */
+            left: 90px;
+            right: 50px;
+        }
+        
+        
+        
+        .column {
+            width: 80%;
+            cursor: pointer;
+        }
+        .column img {
+            width: 550px; /* 固定宽度 */
+            height: 480px; /* 固定高度 */
+            object-fit: cover; /* 保持比例，裁剪多余部分 */
+            margin-bottom: 10px;
+            border-radius: 10px;  
+        }
+        .column .name {
+            font-size: 42px;
+            font-weight: bold;
+            cursor: pointer;
+            display: -webkit-box;     /* 使用旧版的 flexbox */
+            -webkit-line-clamp: 2;   /* 限制在2行内 */ 
+            -webkit-box-orient: vertical;   /* 列方向 */
+            overflow: hidden;        /* 隐藏超出的内容 */
+            line-height: 1.2;
+            color: rgba(0, 0, 0, 0.8);
+            text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+            margin-top: 50px;
+            margin-left: 40px;
+        }
+        .column .price {
+            font-size: 168px;
+            cursor: pointer;
+            color: red;
+            font-family: "Impact", sans-serif;
+            text-shadow: -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white, 2px 2px 0 white;
+            margin-left: 30px;
+            
+        }
+        
+        
+        @font-face {
+            font-family: "Impact";
+            src: url("IMPACT.TTF") format("truetype");
+            /* 添加其他格式的字体文件，以便在不同浏览器中兼容性更好 */
+        }
+        
+        .column .unit {
+            font-size: 38px;
+            color: black;
+            margin-left: 30px;
+        }
+        .column .unit2 {
+            font-size: 34px;
+            color: black;
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        span {
+            font-family: sans-serif;
+        }
+        
+        span:first-child {
+            font-size: 1em;  
+        }
+        
+        span:last-child {
+            font-size: 0.9em;   
+            text-decoration: line-through;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .download-button {
+            position: absolute;
+            font-size: 52px;
+            top: 30px;
+            right: 30px;
+            padding: 10px 20px;
+            background-color: #be104d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+        
+        .download-button:hover {
+            background-color: #45a049;
+        }
+        
+        .wechat-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            font-size: 64px;
+            transform: translate(-50%, -50%);
+            padding: 10px;
+            background-color: #f44336;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+            z-index: 9999;
+        }
+        .show-message .wechat-message {
+            display: block;
+        }
+        .show-message .main-content {
+            display: none;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="currentDate" class="date" contenteditable="true"></div>
+        
+        
+        <div class="row">
+            <div class="column"  onclick="openFilePicker(1)">
+                <img id="image1" src="product1.jpg"> 
+            </div>
+            <div class="column">
+                <div class="name" contenteditable="true" oninput="updateName(1)" onclick="event.stopPropagation();">品名</div>
+                <div class="price" id="price1" contenteditable="true" oninput="updatePrice(1)" onclick="event.stopPropagation();">0</div>
+                <div class="unit" contenteditable="true" onclick="event.stopPropagation();"><span>元/斤</span> &nbsp;&nbsp;&nbsp;&nbsp;<span>原价:</span> </div>
+                <div class="unit2" contenteditable="true" onclick="event.stopPropagation();">每人限购XX    ，售完即止</div>
+            </div>
+        </div>
+        
+        <div class="row2">
+            <div class="column"  onclick="openFilePicker(2)">
+                <img id="image2" src="product1.jpg"> 
+            </div>
+            <div class="column">
+                <div class="name" contenteditable="true" oninput="updateName(2)" onclick="event.stopPropagation();">品名</div>
+                <div class="price" id="price2" contenteditable="true" oninput="updatePrice(2)" onclick="event.stopPropagation();">0</div>
+                <div class="unit" contenteditable="true" onclick="event.stopPropagation();"><span>元/斤</span> &nbsp;&nbsp;&nbsp;&nbsp;<span>原价:</span> </div>
+                <div class="unit2" contenteditable="true" onclick="event.stopPropagation();">每人限购XX    ，售完即止</div>
+            </div>
+        </div>
+        
+        <div class="row3">
+            <div class="column"  onclick="openFilePicker(3)">
+                <img id="image3" src="product1.jpg"> 
+            </div>
+            <div class="column">
+                <div class="name" contenteditable="true" oninput="updateName(3)" onclick="event.stopPropagation();">品名</div>
+                <div class="price" id="price3" contenteditable="true" oninput="updatePrice(3)" onclick="event.stopPropagation();">0</div>
+                <div class="unit" contenteditable="true" onclick="event.stopPropagation();"><span>元/斤</span> &nbsp;&nbsp;&nbsp;&nbsp;<span>原价:</span> </div>
+                <div class="unit2" contenteditable="true" onclick="event.stopPropagation();">每人限购XX    ，售完即止</div>
+            </div>
+        </div>
+        
+        <!-- 添加更多的列，每列三个品种 -->
+        <div class="download-button" onclick="downloadPoster()" id="downloadButton">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        
+        <canvas id="canvas" style="display: none;"></canvas>
+    </div>
+    <script src="dist/html2canvas.min.js"></script>
+    <script>
+        function openFilePicker(id) {
+            var fileInput = document.getElementById("fileInput");
+            fileInput.setAttribute("data-id", id);
+            fileInput.click();
+        }
+        
+        function handleFileChange() {
+            var fileInput = document.getElementById("fileInput");
+            var id = fileInput.getAttribute("data-id");
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var imageUrl = e.target.result;
+                var imageElement = document.getElementById("image" + id);
+                imageElement.src = imageUrl;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function updateDate() {
+            var dateElement = document.querySelector('.date');
+            var newDate = dateElement.innerText;
+            // 处理新的日期数据，例如保存到数据库或进行其他操作
+        }
+        
+        function updateName(id) {
+            var nameElement = document.getElementById("name" + id);
+            var newName = nameElement.innerText;
+            nameElement.textContent = newName;
+        }
+        
+        function updatePrice(id) {
+            var priceElement = document.getElementById("price" + id);
+            var newPrice = priceElement.innerText;
+            priceElement.textContent = newPrice;
+        }
+        
+        function downloadPoster() {
+            var downloadButton = document.getElementById("downloadButton");
+            downloadButton.style.display = "none";
+            
+            var container = document.querySelector(".container");
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+            var containerStyle = getComputedStyle(container);
+            var width = parseInt(containerStyle.width);
+            var height = parseInt(containerStyle.height);
+            canvas.width = width;
+            canvas.height = height;
+            
+            html2canvas(container, {
+                useCORS: true,
+                scale: 0.5
+            }).then(function (renderedCanvas) {
+                var link = document.createElement("a");
+                link.href = renderedCanvas.toDataURL();
+                                var date = new Date();
+ var fileName = date.getFullYear() + "-" + 
+                  (date.getMonth() + 1) + "-" + 
+                  date.getDate() + "_" +
+                  date.getHours() + "-" + 
+                  date.getMinutes() + "-" + 
+                  date.getSeconds();
+ link.download = fileName
+                link.click();
+                
+                downloadButton.style.display = "block";
+            });
+        }
+        
+        function handleFileChange() {
+            var fileInput = document.getElementById("fileInput");
+            var id = fileInput.getAttribute("data-id");
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var imageUrl = e.target.result;
+                
+                // 创建一个新的图像元素
+                var image = new Image();
+                image.onload = function () {
+                    var canvas = document.createElement("canvas");
+                    var context = canvas.getContext("2d");
+                    
+                    // 设置目标尺寸
+                    var targetWidth = 550;
+                    var targetHeight = 480;
+                    
+                    // 计算缩放比例
+                    var scaleFactor = Math.max(targetWidth / image.width, targetHeight / image.height);
+                    
+                    // 计算缩放后的宽度和高度
+                    var scaledWidth = image.width * scaleFactor;
+                    var scaledHeight = image.height * scaleFactor;
+                    
+                    // 计算裁剪位置
+                    var x = (scaledWidth - targetWidth) / 2;
+                    var y = (scaledHeight - targetHeight) / 2;
+                    
+                    // 设置画布尺寸为目标尺寸
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    
+                    // 在画布上绘制缩放后的图像并裁剪
+                    context.drawImage(image, -x, -y, scaledWidth, scaledHeight);
+                    
+                    // 将缩放裁剪后的图像转换为DataURL，并更新对应的图像元素
+                    var croppedImageUrl = canvas.toDataURL();
+                    var imageElement = document.getElementById("image" + id);
+                    imageElement.src = croppedImageUrl;
+                };
+                
+                image.src = imageUrl;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function getCurrentDate() {
+            var dateElement = document.getElementById("currentDate");
+            var today = new Date();
+            
+            var formattedDate = today.toLocaleDateString('zh-CN', { 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            dateElement.innerText = '促销时间：' + formattedDate + '   7点-9点' + '\n促销门店：兆康XX店';
+        }
+        
+        // 调用函数以初始化日期
+        getCurrentDate();
+        
+    </script>
+    <!--
+        <script>
+            // 检测是否为微信客户端
+            var isWeChat = /micromessenger/i.test(navigator.userAgent);
+            
+            // 如果是微信客户端，显示提示信息并隐藏其他内容
+            if (isWeChat) {
+                document.body.classList.add('show-message');
+            }
+        </script>
+        
+        <div class="wechat-message">不要在微信打开，在右上角 ... 选择“在浏览器打开”，否则无法保存</div>
+    -->
+    <input type="file" id="fileInput" accept="image/*" onchange="handleFileChange()">
+</body>
+</html>
