@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海报生成器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="controls">
+        <label for="bg-color-picker">背景颜色:</label>
+        <input type="color" id="bg-color-picker" value="#008A3E">
+        <button id="download-btn">下载海报</button>
+    </div>
+
+    <div id="poster" class="poster">
+        <div class="header">
+            <div class="logo">
+                <img src="logo.png" alt="兆康购物广场 Logo">
+            </div>
+
+        </div>
+
+        <div class="promo-date">
+            <p contenteditable="true">10月18日 ~ 10月19日</p>
+            <p contenteditable="true">仅限2天 (限XX店)</p>
+        </div>
+
+        <div class="product-list">
+            <div class="product-item">
+                <div class="product-img">
+                    <label class="image-upload-label">
+                        <img src="https://s2.loli.net/2023/11/21/5t6gXbW1fFjVv7c.png" alt="品名">
+                        <input type="file" class="image-upload-input" accept="image/*">
+                        <span>更换图片</span>
+                    </label>
+                </div>
+                <div class="product-info">
+                    <h2 contenteditable="true">品名</h2>
+                    <div class="price">
+                        <span class="price-value" contenteditable="true">0.98</span>
+                        <span class="price-unit" contenteditable="true">元/斤</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <div class="product-img">
+                    <label class="image-upload-label">
+                        <img src="https://s2.loli.net/2023/11/21/cE4U3jXgGfWJt8d.png" alt="品名">
+                        <input type="file" class="image-upload-input" accept="image/*">
+                        <span>更换图片</span>
+                    </label>
+                </div>
+                <div class="product-info">
+                    <h2 contenteditable="true">品名</h2>
+                    <div class="price">
+                        <span class="price-value" contenteditable="true">0.98</span>
+                        <span class="price-unit" contenteditable="true">元/斤</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <div class="product-img">
+                    <label class="image-upload-label">
+                        <img src="https://s2.loli.net/2023/11/21/HwzYlJk4U2VcW3O.png" alt="品名">
+                        <input type="file" class="image-upload-input" accept="image/*">
+                        <span>更换图片</span>
+                    </label>
+                </div>
+                <div class="product-info">
+                    <h2 contenteditable="true">品名</h2>
+                    <div class="price">
+                        <span class="price-value" contenteditable="true">0.98</span>
+                        <span class="price-unit" contenteditable="true">元/斤</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <div class="product-img">
+                    <label class="image-upload-label">
+                        <img src="https://s2.loli.net/2023/11/21/I3tTqgVzE9vFm6J.png" alt="品名">
+                        <input type="file" class="image-upload-input" accept="image/*">
+                        <span>更换图片</span>
+                    </label>
+                </div>
+                <div class="product-info">
+                    <h2 contenteditable="true">品名</h2>
+                    <div class="price">
+                        <span class="price-value" contenteditable="true">0.98</span>
+                        <span class="price-unit" contenteditable="true">元/斤</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p contenteditable="true">兆康生鲜,没有最低,只有更低</p>
+        </div>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
