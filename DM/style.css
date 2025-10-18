@@ -4,6 +4,12 @@ html {
     font-size: 1.176vw;
 }
 
+@font-face {
+  font-family: "Impact";
+  src: url("IMPACT.TTF") format("truetype");
+  /* 添加其他格式的字体文件，以便在不同浏览器中兼容性更好 */
+}
+
 @media (min-width: 850px) {
     html {
         /* Cap font size at 10px for larger screens */
@@ -207,4 +213,5 @@ body {
 
 .image-upload-label:hover span {
     opacity: 1;
+
 }
