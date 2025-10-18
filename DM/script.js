@@ -24,9 +24,12 @@ document.addEventListener('DOMContentLoaded', function() {
             activeElement.blur();
         }
 
+        const desiredWidth = 850;
+        const scale = desiredWidth / posterElement.offsetWidth;
+
         html2canvas(posterElement, {
             useCORS: true,
-            scale: 2
+            scale: scale
         }).then(canvas => {
             const link = document.createElement('a');
             link.download = 'poster.png';
