@@ -1,269 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>导航页面</title>
-  <style>
-    body {
-      padding: 20px;
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-    
-    .container {
-      max-width: 850px;
-      margin: 0 auto;
-      padding: 10px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-gap: 18px;
-    }
-    
-    .grid-item {
-      background-color: #fff;
-      padding: 20px;
-      text-align: center;
-      border-radius: 8px;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .grid-item:before {
-      content: '';
-      position: absolute;
-      top: -20px;
-      left: -20px;
-      width: calc(100% + 40px);
-      height: calc(100% + 40px);
-      background: radial-gradient(circle at center, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
-      transform: scale(0);
-      opacity: 0;
-      transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-    }
-    
-    .grid-item:hover:before {
-      transform: scale(1);
-      opacity: 1;
-    }
-    
-    .grid-item a {
-      display: inline-block;
-      font-size: 24px;
-      padding: 8px 16px;
-      color: #333; /* 修改为天蓝色系的链接颜色 */
-      text-decoration: none;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
-    }
-    
-    .grid-item2 {
-      padding: 20px;
-      border-radius: 8px;
-      line-height: 1.3;
-    }
-    
-    .grid-item2 a {
-      display: inline-block;
-      font-size: 22px;
-      padding: 8px 16px;
-      color: #333;
-      text-decoration: none;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
-    }
-    
-    .wechat-message {
-      display: none;
-      position: absolute;
-      top: 15%;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: 0 auto;
-      width: fit-content;
-      height: fit-content;
-      padding: 10px;
-      font-size: 64px;
-      background-color: #f44336;
-      color: #fff;
-      font-weight: bold;
-      text-align: center;
-      z-index: 9999;
-    }
-    
-    .show-message .wechat-message {
-      display: block;
-    }
-    
-    .show-message .container {
-      display: none;
-    }
-    
-    @media (max-device-width: 900px) {
-      .container {
-        grid-template-columns: repeat(2, 1fr);
-        font-size: 80px;
-      }
-      .grid-item a {
-        font-size: 80px;
-      }
-      .grid-item2 a {
-        font-size: 42px;
-        line-height: 1.3;
-      }
-    }
-    
-    @media (max-device-width: 600px) {
-      .container {
-        grid-template-columns: repeat(2, 1fr);
-        font-size: 80px;
-      }
-      .grid-item a {
-        font-size: 80px;
-      }
-      .grid-item2 a {
-        font-size: 42px;
-        line-height: 1.3;
-      }
-    }
-    
-  </style>
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海报生成器</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  
-  <div class="grid-item2">
-    <a href="#">【使用说明】如果你是使用<span style="color: #FFFFFF;">微信直接打开，可以截图保存海报。</span>如果你是用<span style="color: #FFFFFF;">浏览器打开，点击右上角红色方块保存海报</span>，浏览器如果保存不了，请多尝试更换其他浏览器。</a>
-    
-  </div>
-  <div class="container">
-   <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/2025.html" target="_blank" rel="noopener noreferrer">2025</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/xianrou2.html" target="_blank" rel="noopener noreferrer">红色 2格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/sx9.html" target="_blank" rel="noopener noreferrer">生鲜 9格</a>
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/sx4.html" target="_blank" rel="noopener noreferrer">生鲜 4格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/sx1.html" target="_blank" rel="noopener noreferrer">生鲜 1格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/ty1.html" target="_blank" rel="noopener noreferrer">通用 1格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/ty4.html" target="_blank" rel="noopener noreferrer">通用 4格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/ty9.html" target="_blank" rel="noopener noreferrer">通用 9格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/wuxian.html" target="_blank" rel="noopener noreferrer"> N+1格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/wuxian2.html" target="_blank" rel="noopener noreferrer">斤 N+3格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/wuxian3.html" target="_blank" rel="noopener noreferrer">瓶 N+3格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/zs4.html" target="_blank" rel="noopener noreferrer">早市 4格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/ws4.html" target="_blank" rel="noopener noreferrer">晚市 4格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/qt4.html" target="_blank" rel="noopener noreferrer">清台 4格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/ms4.html" target="_blank" rel="noopener noreferrer">秒杀 3格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/upload.html" target="_blank" rel="noopener noreferrer">一键 3格</a>   
-    </div>
-    <div class="grid-item">
-      <a href="https://zk2.0668.fun/DM/upload2.html" target="_blank" rel="noopener noreferrer">一键 1格</a>   
-    </div>
-  
-  </div>
-  <script>
-    // 获取所有容器元素
-    var gridItems = document.querySelectorAll('.grid-item');
-    
-    // 遍历每个容器元素
-    gridItems.forEach(function(item) {
-      // 给容器元素添加点击事件处理程序
-      item.addEventListener('click', function(event) {
-        // 阻止链接默认的点击行为
-        event.preventDefault();
-        // 获取链接元素
-        var link = item.querySelector('a');
-        // 获取链接地址
-        var url = link.getAttribute('href');
-        // 在当前窗口打开链接
-        window.open(url, '_blank');
-      });
-    });
-    
-// 生成与给定颜色相似的随机颜色
-function generateSimilarColor(baseColor, darknessFactor) {
-  var colorRange = 255; // 控制颜色范围，值越小颜色越相似
-  var red = parseInt(baseColor.substr(1, 2), 16);
-  var green = parseInt(baseColor.substr(3, 2), 16);
-  var blue = parseInt(baseColor.substr(5, 2), 16);
 
-  var randomRed = Math.floor(Math.random() * colorRange) - colorRange / 2;
-  var randomGreen = Math.floor(Math.random() * colorRange) - colorRange / 2;
-  var randomBlue = Math.floor(Math.random() * colorRange) - colorRange / 2;
+    <div class="controls">
+        <label for="bg-color-picker">背景颜色:</label>
+        <input type="color" id="bg-color-picker" value="#008A3E">
+        <button id="download-btn">下载海报</button>
+    </div>
 
-  var newRed = Math.min(255, Math.max(0, red + randomRed));
-  var newGreen = Math.min(255, Math.max(0, green + randomGreen));
-  var newBlue = Math.min(255, Math.max(0, blue + randomBlue));
-    // 降低明度
-  newRed = Math.max(0, Math.floor(newRed * (1 - darknessFactor)));
-  newGreen = Math.max(0, Math.floor(newGreen * (1 - darknessFactor)));
-  newBlue = Math.max(0, Math.floor(newBlue * (1 - darknessFactor)));
+    <div id="poster" class="poster">
+        <div class="header">
+            <div class="logo">
+                <img src="https://s2.loli.net/2023/11/21/vA3K5q2hXlR6c8W.png" alt="兆康购物广场 Logo">
+            </div>
+            <div class="header-text">
+                <h1 contenteditable="true">兆康购物广场</h1>
+                <p contenteditable="true">ZHAOKANG SHOPPING CENTER</p>
+            </div>
+        </div>
 
+        <div class="promo-date">
+            <p id="promo-date-range" contenteditable="true">10月18日 ~ 10月19日</p>
+            <p contenteditable="true">仅限2天 (限市区三店)</p>
+        </div>
 
-  var newColor = "#" + componentToHex(newRed) + componentToHex(newGreen) + componentToHex(newBlue);
-  return newColor;
-}
+        <div class="product-list">
+            <div class="product-item">
+                <div class="product-img">
+                    <label class="image-upload-label">
+                        <img src="https://s2.loli.net/2023/11/21/5t6gXbW1fFjVv7c.png" alt="莲藕">
+                        <input type="file" class="image-upload-input" accept="image/*">
+                        <span>更换图片</span>
+                    </label>
+                </div>
+                <div class="product-info">
+                    <h2 contenteditable="true">莲藕(整条)</h2>
+                    <div class="price">
+                        <span class="price-value" contenteditable="true">2.98</span>
+                        <span class="price-unit" contenteditable="true">元/斤</span>
+                    </div>
+                </div>
+            </div>
 
-// 将颜色组件转换为十六进制
-function componentToHex(c) {
-  var hex = c.toString(16);
-  return hex.length === 1 ? "0" + hex : hex;
-}
+            <div class="product-item">
+                <div class="product-img">
+                    <label class="image-upload-label">
+                        <img src="https://s2.loli.net/2023/11/21/cE4U3jXgGfWJt8d.png" alt="白萝卜">
+                        <input type="file" class="image-upload-input" accept="image/*">
+                        <span>更换图片</span>
+                    </label>
+                </div>
+                <div class="product-info">
+                    <h2 contenteditable="true">白萝卜</h2>
+                    <div class="price">
+                        <span class="price-value" contenteditable="true">0.79</span>
+                        <span class="price-unit" contenteditable="true">元/斤</span>
+                    </div>
+                </div>
+            </div>
 
-// 设置随机背景颜色
-function setRandomBackgroundColor() {
-  var body = document.getElementsByTagName("body")[0];
-  var darknessFactor = 0.2; 
-  var randomColor = generateSimilarColor("#D4F1FF", darknessFactor);
-  body.style.backgroundColor = randomColor;
-}
+            <div class="product-item">
+                <div class="product-img">
+                    <label class="image-upload-label">
+                        <img src="https://s2.loli.net/2023/11/21/HwzYlJk4U2VcW3O.png" alt="秋葵">
+                        <input type="file" class="image-upload-input" accept="image/*">
+                        <span>更换图片</span>
+                    </label>
+                </div>
+                <div class="product-info">
+                    <h2 contenteditable="true">秋葵</h2>
+                    <div class="price">
+                        <span class="price-value" contenteditable="true">3.38</span>
+                        <span class="price-unit" contenteditable="true">元/斤</span>
+                    </div>
+                </div>
+            </div>
 
-// 在页面加载时设置随机背景颜色
-window.onload = setRandomBackgroundColor;
+            <div class="product-item">
+                <div class="product-img">
+                    <label class="image-upload-label">
+                        <img src="https://s2.loli.net/2023/11/21/I3tTqgVzE9vFm6J.png" alt="黄金菜">
+                        <input type="file" class="image-upload-input" accept="image/*">
+                        <span>更换图片</span>
+                    </label>
+                </div>
+                <div class="product-info">
+                    <h2 contenteditable="true">黄金菜</h2>
+                    <div class="price">
+                        <span class="price-value" contenteditable="true">1.38</span>
+                        <span class="price-unit" contenteditable="true">元/斤</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  </script>
-  <!--
-    <script>
-      // 检测是否为微信客户端
-      var isWeChat = /micromessenger/i.test(navigator.userAgent);
-      
-      // 如果是微信客户端，显示提示信息并隐藏其他内容
-      if (isWeChat) {
-        document.body.classList.add('show-message');
-      }
-    </script>
-    <div class="wechat-message">不要在微信直接打开<br>请复制网址到浏览器打开<br>或在上方 ... 使用浏览器打开</div>
-  -->
+        <div class="footer">
+            <p contenteditable="true">兆康生鲜,没有最低,只有更低</p>
+        </div>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+
 </body>
 </html>
-
-
