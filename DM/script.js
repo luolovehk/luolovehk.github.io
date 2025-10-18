@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
             activeElement.blur();
         }
 
-        const desiredWidth = 680;
+        const desiredWidth = 850;
         const scale = desiredWidth / posterElement.offsetWidth;
 
         html2canvas(posterElement, {
@@ -102,4 +102,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
 
