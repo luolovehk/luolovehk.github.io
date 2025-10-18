@@ -46,11 +46,53 @@ document.addEventListener('DOMContentLoaded', function() {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                const imgElement = event.target.closest('.image-upload-label').querySelector('img');
-                
+                const labelElement = event.target.closest('.image-upload-label');
+                const imgElement = labelElement.querySelector('img');
+
+                // Ensure the label has position relative and overflow hidden
+                // This should ideally be in CSS, but we add it here for robustness.
+                labelElement.style.position = 'relative';
+                labelElement.style.overflow = 'hidden';
+
                 reader.onload = function(e) {
-                    imgElement.src = e.target.result;
-                    imgElement.style.objectFit = 'cover';
+                    const tempImage = new Image();
+                    tempImage.onload = function() {
+                        const containerWidth = labelElement.offsetWidth;
+                        const containerHeight = labelElement.offsetHeight;
+                        const imageWidth = tempImage.naturalWidth;
+                        const imageHeight = tempImage.naturalHeight;
+
+                        const containerRatio = containerWidth / containerHeight;
+                        const imageRatio = imageWidth / imageHeight;
+
+                        let newWidth, newHeight, newLeft, newTop;
+
+                        if (imageRatio > containerRatio) {
+                            // Image is wider than container, fit height
+                            newHeight = containerHeight;
+                            newWidth = newHeight * imageRatio;
+                            newTop = 0;
+                            newLeft = (containerWidth - newWidth) / 2;
+                        } else {
+                            // Image is taller than container, fit width
+                            newWidth = containerWidth;
+                            newHeight = newWidth / imageRatio;
+                            newLeft = 0;
+                            newTop = (containerHeight - newHeight) / 2;
+                        }
+
+                        if (imgElement) {
+                            imgElement.src = e.target.result;
+                            imgElement.style.display = 'block'; // Make sure it's visible
+                            imgElement.style.position = 'absolute';
+                            imgElement.style.width = newWidth + 'px';
+                            imgElement.style.height = newHeight + 'px';
+                            imgElement.style.left = newLeft + 'px';
+                            imgElement.style.top = newTop + 'px';
+                            imgElement.style.objectFit = 'initial'; // Reset object-fit
+                        }
+                    };
+                    tempImage.src = e.target.result;
                 }
                 reader.readAsDataURL(file);
             }
