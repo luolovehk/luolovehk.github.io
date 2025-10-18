@@ -112,7 +112,7 @@ body {
 
 .product-info {
     width: 55%;
-    background: linear-gradient(to right, #D2E537, #FEF200);
+    background: linear-gradient(to right, #FEF200, #D2E537);
     padding: 1.7rem;
     box-sizing: border-box;
     display: flex;
