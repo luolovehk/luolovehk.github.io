@@ -24,15 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
             activeElement.blur();
         }
 
-        // Ensure images inside poster keep their aspect ratio and are cropped (not stretched)
-        posterElement.querySelectorAll('img').forEach(img => {
-            // Force the image to fill its container while preserving aspect ratio (crop if needed)
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'cover';
-            img.style.objectPosition = 'center center';
-        });
-
         html2canvas(posterElement, {
             useCORS: true,
             scale: 2
@@ -59,12 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 reader.onload = function(e) {
                     imgElement.src = e.target.result;
-
-                    // Ensure the displayed image preserves aspect ratio and is cropped to fit the container
-                    imgElement.style.width = '100%';
-                    imgElement.style.height = '100%';
                     imgElement.style.objectFit = 'cover';
-                    imgElement.style.objectPosition = 'center center';
                 }
                 reader.readAsDataURL(file);
             }
