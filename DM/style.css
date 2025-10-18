@@ -134,7 +134,7 @@ body {
 
 .price .price-value {
     font-family: "Impact", sans-serif;
-    font-size: 9.5rem;
+    font-size: 13rem;
     font-weight: 400;
     color: #E50012;
     line-height: 1;
@@ -214,6 +214,7 @@ body {
     opacity: 1;
 
 }
+
 
 
 
