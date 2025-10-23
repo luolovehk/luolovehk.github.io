@@ -107,7 +107,7 @@ document.getElementById('lightboxOverlay').addEventListener('click', (e)=>{
     }
 });
 
-// --- 海报生成 ---
+// 海报生成
 document.getElementById('generatePoster').addEventListener('click', function(){
     let firstAlert = document.querySelector('.alert-box');
     if(!firstAlert){ alert("暂无警报信息"); return; }
@@ -116,69 +116,97 @@ document.getElementById('generatePoster').addEventListener('click', function(){
     let time = firstAlert.querySelector('.alert-time').textContent;
     let message = firstAlert.querySelector('.alert-message').textContent;
     let url = window.location.href;
-    let imageUrl = firstAlert.querySelector('.alert-link a') ? firstAlert.querySelector('.alert-link a').getAttribute('data-img') : null;
+    let imageUrl = firstAlert.querySelector('.alert-link a') 
+                   ? firstAlert.querySelector('.alert-link a').getAttribute('data-img') 
+                   : null;
 
+    // 创建图片对象，但图片是否存在都继续执行
     let img = new Image();
-    img.crossOrigin="anonymous";
+    img.crossOrigin = "anonymous";
     if(imageUrl) img.src = imageUrl;
 
-    img.onload = img.onerror = function(){
-        let maxWidth = 700;
-        let scale = (img.width && img.width > maxWidth) ? maxWidth/img.width : 1;
-        let imgWidth = img.width ? img.width*scale : 0;
-        let imgHeight = img.height ? img.height*scale : 0;
+    // ✅ 不论图片是否加载成功，都执行 drawPoster()
+    if(imageUrl){
+        img.onload = ()=> drawPoster(img);
+        img.onerror = ()=> drawPoster(null);
+    } else {
+        drawPoster(null);
+    }
 
+    function drawPoster(imageObj){
+        let maxWidth = 700;
+        let imgWidth = 0, imgHeight = 0;
+
+        if(imageObj && imageObj.width){
+            let scale = imageObj.width > maxWidth ? maxWidth / imageObj.width : 1;
+            imgWidth = imageObj.width * scale;
+            imgHeight = imageObj.height * scale;
+        }
+
+        // 计算文字高度
         let textCanvas = document.createElement('canvas');
         let textCtx = textCanvas.getContext('2d');
         textCtx.font="40px MicrosoftJhengHei";
         let messageHeight = calculateTextHeight(textCtx,message,700,50);
         let timeHeight = 50;
 
-        let canvasHeight = 100+20 + timeHeight + messageHeight + imgHeight + 230;
-
+        let canvasHeight = 100 + 20 + timeHeight + messageHeight + imgHeight + 230;
         let canvas=document.createElement('canvas');
         let ctx = canvas.getContext('2d');
         canvas.width = 800;
         canvas.height = canvasHeight;
 
-        ctx.fillStyle="#fff"; ctx.fillRect(0,0,canvas.width,canvas.height);
+        // 背景
+        ctx.fillStyle="#fff"; 
+        ctx.fillRect(0,0,canvas.width,canvas.height);
 
-        ctx.textAlign="center"; ctx.font="bold 80px MicrosoftJhengHei"; ctx.fillStyle="#E62129";
+        // 标题
+        ctx.textAlign="center"; 
+        ctx.font="bold 80px MicrosoftJhengHei"; 
+        ctx.fillStyle="#E62129";
         ctx.fillText(title, canvas.width/2, 100);
 
+        // 时间 + 文字
         let textY = 150;
-        ctx.textAlign="left"; ctx.font="35px MicrosoftJhengHei"; ctx.fillStyle="#666";
+        ctx.textAlign="left"; 
+        ctx.font="35px MicrosoftJhengHei"; 
+        ctx.fillStyle="#666";
         ctx.fillText("时间："+time,50,textY+20);
-        ctx.font="40px MicrosoftJhengHei"; ctx.fillStyle="#000";
+        ctx.font="40px MicrosoftJhengHei"; 
+        ctx.fillStyle="#000";
         wrapText(ctx,message,50,textY+70,700,50);
 
+        // ✅ 只有当有图片时才绘制
         let imgY = textY + 50 + messageHeight + 20;
-        let imgX = (canvas.width-imgWidth)/2;
-        if(imgWidth && imgHeight) ctx.drawImage(img,imgX,imgY,imgWidth,imgHeight);
+        if(imgWidth && imgHeight){
+            let imgX = (canvas.width - imgWidth) / 2;
+            ctx.drawImage(imageObj, imgX, imgY, imgWidth, imgHeight);
+        }
 
-		// 二维码
-		let qrDiv = document.createElement('div');
-		new QRCode(qrDiv,{text:url,width:200,height:200});
-		let qrCanvas = qrDiv.querySelector('canvas');
-		setTimeout(()=>{
-			let qrSize = 150;
-			let qrX = (canvas.width - qrSize) / 2;
-			ctx.drawImage(qrCanvas, qrX, canvas.height - 200, qrSize, qrSize);
+        // 二维码 + 提示文字
+        let qrDiv = document.createElement('div');
+        new QRCode(qrDiv,{text:url,width:200,height:200});
+        let qrCanvas = qrDiv.querySelector('canvas');
 
-			ctx.textAlign = "center";
-			ctx.font = "24px Arial";
-			ctx.fillStyle = "#E62129";
-			ctx.fillText("扫码查看最新消息", canvas.width/2, canvas.height - 20);
+        setTimeout(()=>{
+            let qrSize = 150;
+            let qrX = (canvas.width - qrSize) / 2;
+            ctx.drawImage(qrCanvas, qrX, canvas.height - 200, qrSize, qrSize);
+            ctx.textAlign = "center";
+            ctx.font = "24px Arial";
+            ctx.fillStyle = "#E62129";
+            ctx.fillText("扫码查看最新消息", canvas.width/2, canvas.height - 20);
 
-			let posterUrl = canvas.toDataURL("image/png");
-			let a = document.createElement('a'); 
-			a.download = "poster.png"; 
-			a.href = posterUrl; 
-			a.click();
-		},500);
-
-    };
+            // 保存图片
+            let posterUrl = canvas.toDataURL("image/png");
+            let a = document.createElement('a'); 
+            a.download = "poster.png"; 
+            a.href = posterUrl; 
+            a.click();
+        },500);
+    }
 });
+
 
 // --- 文字换行与高度计算 ---
 function calculateTextHeight(ctx,text,maxWidth,lineHeight){
