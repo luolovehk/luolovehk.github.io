@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>化州天气 - 海报生成</title>
+<style>
+body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin:0; padding:20px; }
+h1 { text-align:center; color:#333; }
+#alerts { max-width:800px; margin:20px auto; }
+.alert-box { background:#fff; padding:15px; margin:10px 0; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+.alert-time { font-size:12px; color:#666; margin-bottom:5px; }
+.alert-message { font-size:16px; color:#333; margin-bottom:5px; }
+.alert-link a { font-size:14px; color:blue; text-decoration:underline; display:block; margin-top:5px;}
+#generatePoster { position:fixed; top:20px; right:20px; padding:10px 15px; background:#007bff; color:#fff; border:none; border-radius:6px; cursor:pointer;}
+</style>
+</head>
+<body>
+<h1>☀️化州天气💦</h1>
+<div id="alerts">加载中...</div>
+<button id="generatePoster">生成海报</button>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+<script>
+// 获取警报数据
+async function fetchAlerts() {
+    try {
+        let res = await fetch('https://so2.0668.live/yabao/json?poll=1');
+        let text = await res.text();
+        let container = document.getElementById('alerts');
+        container.innerHTML = '';
+        text.trim().split('\n').forEach(line => {
+            try {
+                let data = JSON.parse(line);
+                if (!data.message) return;
+                let box = document.createElement('div');
+                box.classList.add('alert-box');
+                let timeStr = new Date(data.time * 1000).toLocaleString('zh-CN',{hour12:false});
+                let html = `<div class="alert-time">${timeStr}</div>
+                            <div class="alert-message">${data.message}</div>`;
+                if(data.attachment && data.attachment.url){
+                    html += `<div class="alert-link"><a href="${data.attachment.url}" target="_blank">点击查看图片</a></div>`;
+                }
+                box.innerHTML = html;
+                container.prepend(box);
+            } catch(e){}
+        });
+    } catch {
+        document.getElementById('alerts').innerHTML='无法加载警报';
+    }
+}
+fetchAlerts();
+setInterval(fetchAlerts,600000);
+
+// 海报生成
+document.getElementById('generatePoster').addEventListener('click',function(){
+    let firstAlert = document.querySelector('.alert-box');
+    if(!firstAlert){ alert("暂无警报信息"); return; }
+
+    let title="寻人启事";
+    let time = firstAlert.querySelector('.alert-time').textContent;
+    let message = firstAlert.querySelector('.alert-message').textContent;
+    let url = window.location.href;
+    let imageUrl = firstAlert.querySelector('.alert-link a') ? firstAlert.querySelector('.alert-link a').href : null;
+
+    // 创建图片对象
+    let img = new Image();
+    img.crossOrigin="anonymous";
+    if(imageUrl) img.src = imageUrl;
+
+    img.onload = img.onerror = function(){
+        let maxWidth = 700;
+        let scale = (img.width && img.width > maxWidth) ? maxWidth/img.width : 1;
+        let imgWidth = img.width ? img.width*scale : 0;
+        let imgHeight = img.height ? img.height*scale : 0;
+
+        // 计算文字高度
+        let textCanvas = document.createElement('canvas');
+        let textCtx = textCanvas.getContext('2d');
+        textCtx.font="40px Arial";
+        let messageHeight = calculateTextHeight(textCtx,message,700,50);
+        let timeHeight = 50;
+
+        // 海报总高度：标题100 + 间距20 + 文字高度 + 图片高度 + 底部二维码230 + margin
+        let canvasHeight = 100+20 + timeHeight + messageHeight + imgHeight + 230;
+
+        let canvas=document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
+        canvas.width = 800;
+        canvas.height = canvasHeight;
+
+        // 背景
+        ctx.fillStyle="#fff"; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        // 标题
+        ctx.textAlign="center"; ctx.font="bold 80px Arial"; ctx.fillStyle="#E62129";
+        ctx.fillText(title, canvas.width/2, 100);
+
+        // 文字在图片上方显示
+        let textY = 150;
+        ctx.textAlign="left"; ctx.font="35px Arial"; ctx.fillStyle="#666";
+        ctx.fillText("时间："+time,50,textY+20);
+        ctx.font="40px Arial"; ctx.fillStyle="#000";
+        wrapText(ctx,message,50,textY+70,700,50);
+
+        // 图片
+        let imgY = textY + 50 + messageHeight + 20;
+        let imgX = (canvas.width-imgWidth)/2;
+        if(imgWidth && imgHeight) ctx.drawImage(img,imgX,imgY,imgWidth,imgHeight);
+
+        // 二维码
+        let qrDiv = document.createElement('div');
+        new QRCode(qrDiv,{text:url,width:200,height:200});
+        let qrCanvas = qrDiv.querySelector('canvas');
+        setTimeout(()=>{
+            ctx.drawImage(qrCanvas,550,canvas.height-230,200,200);
+            ctx.textAlign="center"; ctx.font="20px Arial"; ctx.fillStyle="#333";
+            ctx.fillText("扫码查看最新情况",650,canvas.height-20);
+
+            let posterUrl = canvas.toDataURL("image/png");
+            let a = document.createElement('a'); a.download="poster.png"; a.href=posterUrl; a.click();
+        },500);
+    };
+});
+
+// 计算文字高度
+function calculateTextHeight(ctx,text,maxWidth,lineHeight){
+    let words = text.split('');
+    let line='';
+    let height=0;
+    for(let char of words){
+        let testLine = line + char;
+        if(ctx.measureText(testLine).width>maxWidth && line!==''){
+            height += lineHeight;
+            line=char;
+        }else{
+            line=testLine;
+        }
+    }
+    height += lineHeight;
+    return height;
+}
+
+// 文本换行
+function wrapText(ctx,text,x,y,maxWidth,lineHeight){
+    let words = text.split('');
+    let line='';
+    for(let char of words){
+        let testLine = line + char;
+        if(ctx.measureText(testLine).width>maxWidth && line!==''){
+            ctx.fillText(line,x,y);
+            line=char; y+=lineHeight;
+        }else{
+            line=testLine;
+        }
+    }
+    ctx.fillText(line,x,y);
+}
+</script>
+</body>
+</html>
