@@ -115,7 +115,7 @@ document.getElementById('generatePoster').addEventListener('click',function(){
         let qrCanvas = qrDiv.querySelector('canvas');
         setTimeout(()=>{
             ctx.drawImage(qrCanvas,550,canvas.height-230,200,200);
-            ctx.textAlign="center"; ctx.font="20px Arial"; ctx.fillStyle="#333";
+            ctx.textAlign="center"; ctx.font="30px Arial"; ctx.fillStyle="#E62129";
             ctx.fillText("扫码查看最新情况",650,canvas.height-20);
 
             let posterUrl = canvas.toDataURL("image/png");
