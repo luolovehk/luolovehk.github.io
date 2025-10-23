@@ -49,7 +49,7 @@ h1 { text-align:center; color:#333; }
     <img id="lightboxImg" src="" alt="">
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 // --- 获取警报数据 ---
 async function fetchAlerts() {
@@ -156,17 +156,27 @@ document.getElementById('generatePoster').addEventListener('click', function(){
         let imgX = (canvas.width-imgWidth)/2;
         if(imgWidth && imgHeight) ctx.drawImage(img,imgX,imgY,imgWidth,imgHeight);
 
-        let qrDiv = document.createElement('div');
-        new QRCode(qrDiv,{text:url,width:200,height:200});
-        let qrCanvas = qrDiv.querySelector('canvas');
-        setTimeout(()=>{
-            ctx.drawImage(qrCanvas,580,canvas.height-200,150,150);
-            ctx.textAlign="center"; ctx.font="24px MicrosoftJhengHei"; ctx.fillStyle="#E62129";
-            ctx.fillText("扫码查看最新情况",650,canvas.height-20);
+		// 二维码
+		let qrDiv = document.createElement('div');
+		new QRCode(qrDiv,{text:url,width:200,height:200});
+		let qrCanvas = qrDiv.querySelector('canvas');
+		setTimeout(()=>{
+			let qrSize = 150;
+			let qrX = (canvas.width - qrSize) / 2;
+			ctx.drawImage(qrCanvas, qrX, canvas.height - 200, qrSize, qrSize);
 
-            let posterUrl = canvas.toDataURL("image/png");
-            let a = document.createElement('a'); a.download="poster.png"; a.href=posterUrl; a.click();
-        },500);
+			ctx.textAlign = "center";
+			ctx.font = "24px Arial";
+			ctx.fillStyle = "#E62129";
+			ctx.fillText("扫码查看最新情况", canvas.width/2, canvas.height - 20);
+
+			let posterUrl = canvas.toDataURL("image/png");
+			let a = document.createElement('a'); 
+			a.download = "poster.png"; 
+			a.href = posterUrl; 
+			a.click();
+		},500);
+
     };
 });
 
