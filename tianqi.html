@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>化州天气</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        #alerts {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        .alert-box {
+            background: #fff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .alert-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .alert-time {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .alert-message {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .alert-link a {
+            font-size: 14px;
+            color: blue;
+            text-decoration: underline;
+        }
+        @media (min-width: 1200px) {
+            #alerts {
+                width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>☀️化州天气💦</h1>
+    <div id="alerts">加载中...</div>
+    <script>
+        function formatTime(timestamp) {
+            let date = new Date(timestamp * 1000);
+            return date.toLocaleString('zh-CN', { hour12: false });
+        }
+
+        async function fetchAlerts() {
+            try {
+                let response = await fetch('https://so2.0668.live/tianqi/json?poll=1');
+                let text = await response.text();
+                let container = document.getElementById('alerts');
+                container.innerHTML = '';
+
+                let lines = text.trim().split('\n');
+                lines.forEach(line => {
+                    try {
+                        let data = JSON.parse(line);
+                        if (data.message) { 
+                            let alertDiv = document.createElement('div');
+                            alertDiv.classList.add('alert-box');
+
+                            let timeDiv = document.createElement('div');
+                            timeDiv.classList.add('alert-time');
+                            timeDiv.textContent = formatTime(data.time);
+
+                            let messageDiv = document.createElement('div');
+                            messageDiv.classList.add('alert-message');
+                            messageDiv.textContent = data.message;
+
+                            alertDiv.appendChild(timeDiv);
+                            alertDiv.appendChild(messageDiv);
+
+                            // 如果有图片链接，创建超链接
+                            if (data.attachment && data.attachment.url) {
+                                let linkDiv = document.createElement('div');
+                                linkDiv.classList.add('alert-link');
+                                let link = document.createElement('a');
+                                link.href = data.attachment.url;
+                                link.textContent = "点击查看图片";
+                                link.target = "_blank"; // 新标签打开链接
+                                linkDiv.appendChild(link);
+                                alertDiv.appendChild(linkDiv);
+                            }
+
+                            container.prepend(alertDiv);
+                        }
+                    } catch (jsonError) {
+                        console.error('JSON 解析错误:', jsonError);
+                    }
+                });
+
+            } catch (error) {
+                document.getElementById('alerts').innerHTML = '无法加载警报';
+            }
+        }
+
+        fetchAlerts();
+        setInterval(fetchAlerts, 600000);
+    </script>
+</body>
+</html>
