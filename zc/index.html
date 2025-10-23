@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片快速生成动态图</title>
+    <script src="gif.js"></script>
+</head>
+<body>
+    <h1>上传两张图片，快速生成动态图</h1>
+    
+    <!-- 文件上传区域 -->
+    <input type="file" id="imageInput1" accept="image/*">
+    <br><br>
+    <input type="file" id="imageInput2" accept="image/*">
+    <br><br>
+    <button onclick="generateGIF()">生成动态图</button>
+    
+    <!-- 显示结果 -->
+    <h2>生成的动态图：</h2>
+    <img id="resultGIF" alt="动态图将显示在这里">
+
+    <script>
+        function generateGIF() {
+            const imgInput1 = document.getElementById('imageInput1').files[0];
+            const imgInput2 = document.getElementById('imageInput2').files[0];
+            const resultGIF = document.getElementById('resultGIF');
+            
+            if (!imgInput1 || !imgInput2) {
+                alert('请上传两张图片！');
+                return;
+            }
+
+            const gif = new GIF({
+                workers: 2,
+                quality: 30,
+                workerScript: 'gif.worker.js'
+            });
+            
+            // 读取图片并添加到 GIF
+            const reader1 = new FileReader();
+            const reader2 = new FileReader();
+            
+            reader1.onload = function (e) {
+                const img1 = new Image();
+                img1.src = e.target.result;
+                img1.onload = () => {
+                    gif.addFrame(img1, { delay: 100 }); // 每帧延迟 500ms
+                    reader2.readAsDataURL(imgInput2);
+                };
+            };
+
+            reader2.onload = function (e) {
+                const img2 = new Image();
+                img2.src = e.target.result;
+                img2.onload = () => {
+                    gif.addFrame(img2, { delay: 500 });
+                    gif.render();
+                };
+            };
+            
+            gif.on('finished', function (blob) {
+                resultGIF.src = URL.createObjectURL(blob);
+            });
+
+            reader1.readAsDataURL(imgInput1);
+        }
+    </script>
+</body>
+</html>
