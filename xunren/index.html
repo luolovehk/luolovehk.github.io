@@ -130,7 +130,7 @@ document.getElementById('generatePoster').addEventListener('click', function(){
 
         let textCanvas = document.createElement('canvas');
         let textCtx = textCanvas.getContext('2d');
-        textCtx.font="40px Arial";
+        textCtx.font="40px MicrosoftJhengHei";
         let messageHeight = calculateTextHeight(textCtx,message,700,50);
         let timeHeight = 50;
 
@@ -143,13 +143,13 @@ document.getElementById('generatePoster').addEventListener('click', function(){
 
         ctx.fillStyle="#fff"; ctx.fillRect(0,0,canvas.width,canvas.height);
 
-        ctx.textAlign="center"; ctx.font="bold 80px Arial"; ctx.fillStyle="#E62129";
+        ctx.textAlign="center"; ctx.font="bold 80px MicrosoftJhengHei"; ctx.fillStyle="#E62129";
         ctx.fillText(title, canvas.width/2, 100);
 
         let textY = 150;
-        ctx.textAlign="left"; ctx.font="35px Arial"; ctx.fillStyle="#666";
+        ctx.textAlign="left"; ctx.font="35px MicrosoftJhengHei"; ctx.fillStyle="#666";
         ctx.fillText("时间："+time,50,textY+20);
-        ctx.font="40px Arial"; ctx.fillStyle="#000";
+        ctx.font="40px MicrosoftJhengHei"; ctx.fillStyle="#000";
         wrapText(ctx,message,50,textY+70,700,50);
 
         let imgY = textY + 50 + messageHeight + 20;
@@ -161,7 +161,7 @@ document.getElementById('generatePoster').addEventListener('click', function(){
         let qrCanvas = qrDiv.querySelector('canvas');
         setTimeout(()=>{
             ctx.drawImage(qrCanvas,580,canvas.height-200,150,150);
-            ctx.textAlign="center"; ctx.font="24px Arial"; ctx.fillStyle="#E62129";
+            ctx.textAlign="center"; ctx.font="24px MicrosoftJhengHei"; ctx.fillStyle="#E62129";
             ctx.fillText("扫码查看最新情况",650,canvas.height-20);
 
             let posterUrl = canvas.toDataURL("image/png");
