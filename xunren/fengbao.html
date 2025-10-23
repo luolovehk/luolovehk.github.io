@@ -39,7 +39,7 @@ h1 { text-align:center; color:#333; }
 </style>
 </head>
 <body>
-<h1>最新情况</h1>
+<h1>🌪台风消息</h1>
 <div id="alerts">加载中...</div>
 <button id="generatePoster">生成海报</button>
 
@@ -112,7 +112,7 @@ document.getElementById('generatePoster').addEventListener('click', function(){
     let firstAlert = document.querySelector('.alert-box');
     if(!firstAlert){ alert("暂无警报信息"); return; }
 
-    let title="🌪台风消息";
+    let title="台风消息";
     let time = firstAlert.querySelector('.alert-time').textContent;
     let message = firstAlert.querySelector('.alert-message').textContent;
     let url = window.location.href;
