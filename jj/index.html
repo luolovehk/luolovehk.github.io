@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>基金批量查询工具</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(120deg, #f0f4f9 0%, #e0e7ef 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto 0 auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(60, 80, 120, 0.13);
+            padding: 32px 28px 24px 28px;
+        }
+        h2 {
+            text-align: center;
+            color: #2b3a55;
+            margin-bottom: 18px;
+        }
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+            align-items: center;
+            justify-content: center;
+        }
+        #fundCodes {
+            width: 340px;
+            min-height: 38px;
+            border: 1px solid #bfc8d6;
+            border-radius: 7px;
+            padding: 8px 12px;
+            font-size: 16px;
+            resize: vertical;
+            background: #f7fafd;
+            color: #2b3a55;
+        }
+        button {
+            background: linear-gradient(90deg, #4f8cff 0%, #38cfa6 100%);
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            padding: 10px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(79, 140, 255, 0.08);
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #38cfa6 0%, #4f8cff 100%);
+            box-shadow: 0 4px 16px rgba(56, 207, 166, 0.13);
+        }
+        #updateTime {
+            text-align: right;
+            color: #7a8599;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f7fafd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 8px 6px;
+            text-align: center;
+            border-bottom: 1px solid #e3e8f0;
+            font-size: 15px;
+        }
+        th {
+            background: #9bbdfd;
+            color: #2b3a55;
+            font-weight: 600;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        /* 隔行变色 */
+        tbody tr:nth-child(even) {
+            background-color: #ebf2fc;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        /* 涨跌红绿色 */
+        .rise {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .fall {
+            color: #1abc9c;
+            font-weight: bold;
+        }
+        /* 图片悬停样式 */
+        .img-hover {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .img-hover img {
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 110%;
+            transform: translateX(-50%);
+            max-width: 320px;
+            max-height: 220px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(60,80,120,0.18);
+            background: #fff;
+            z-index: 10;
+        }
+        .img-hover:hover img {
+            display: block;
+        }
+        .img-tip {
+            color: #4f8cff;
+            font-size: 14px;
+            text-decoration: underline dotted;
+        }
+        @media (max-width: 900px) {
+            .container { padding: 12px 2vw; }
+            table, th, td { font-size: 13px; }
+            #fundCodes { width: 98vw; min-width: 0; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>基金批量查询工具</h2>
+    <div class="input-group">
+        <textarea id="fundCodes" rows="12" placeholder="输入多个基金代码，空格/换行分隔">
+515100
+159691
+518880
+511010
+511090
+159972
+511380
+513400
+513650
+513500
+513660
+159920
+513550
+159691
+513630
+513300
+513110
+513100
+513290
+164824
+513730
+513520
+513800
+513030
+513080
+512880
+159509
+159502
+510500
+510300
+512800
+</textarea>
+        <button onclick="fetchFunds()">查询</button>
+    </div>
+    <div id="updateTime">更新时间：</div>
+    <div style="overflow-x:auto;">
+        <table>
+            <thead>
+            <tr>
+                <th>基金代码</th>
+                <th>名称</th>
+                <th>近一年收益率</th>
+                <th>近六月收益率</th>
+                <th>近三月收益率</th>
+                <th>近一月收益率</th>
+                <th>规模</th>
+                <th>规模增长</th>
+                <th>最新净值</th>
+                <th>净值涨跌</th>
+                <th>腾讯行情</th>
+                <th>净值估算图</th>
+                <th>单位净值走势</th>
+                <th>持仓前10名</th>
+            </tr>
+            </thead>
+            <tbody id="resultBody"></tbody>
+        </table>
+    </div>
+    <div id="loadingMask" style="display:none;position:fixed;left:0;top:0;width:100vw;height:100vh;background:rgba(255,255,255,0.7);z-index:9999;align-items:center;justify-content:center;font-size:22px;color:#2b3a55;font-weight:bold;">
+        <span id="loadingText">数据加载中...</span>
+    </div>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
