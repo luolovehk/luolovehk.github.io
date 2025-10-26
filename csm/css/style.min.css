@@ -2,6 +2,7 @@
 body {
     overflow: hidden;
     height: 100%
+    font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei" !important;
 }
 
 html {
@@ -10,7 +11,6 @@ html {
 
 body {
     margin: 0;
-    font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei" !important;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
