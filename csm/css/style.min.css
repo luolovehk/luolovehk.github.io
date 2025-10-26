@@ -1,8 +1,9 @@
 ﻿html,
 body {
-    overflow: hidden;
-    height: 100%;
     font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei" !important;
+    overflow: hidden;
+    height: 100%
+
 }
 
 html {
