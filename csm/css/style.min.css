@@ -10,7 +10,7 @@ html {
 
 body {
     margin: 0;
-    font-family: -apple-system-font, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+    font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei";
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
